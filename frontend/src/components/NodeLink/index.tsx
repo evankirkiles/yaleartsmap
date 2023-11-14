@@ -11,12 +11,22 @@ import { useSetAtom } from "jotai";
 import Link from "next/link";
 import { ComponentProps, PropsWithChildren, useRef } from "react";
 import s from "./NodeLink.module.scss";
+import { ExtendedNodeObject } from "@/app/api/graph/utils";
 
 interface NodeLinkProps extends PropsWithChildren {
   nodeType: "production" | "person";
   nodeId: number;
   onlyScroll?: boolean;
 }
+
+const FAKE_NODE_DATA: ExtendedNodeObject = {
+  id: "...",
+  _type: "none",
+  name: "undefined",
+  val: 1,
+  x: 0,
+  y: 0,
+};
 
 export default function NodeLink({
   nodeType,
@@ -38,8 +48,10 @@ export default function NodeLink({
       {...props}
       prefetch={false}
       className={`${props.className} ${s.node_link}`}
-      onMouseEnter={() => setHoveredNode(nodeGraphId)}
-      onFocus={() => setHoveredNode(nodeGraphId)}
+      onMouseEnter={() =>
+        setHoveredNode({ ...FAKE_NODE_DATA, id: nodeGraphId })
+      }
+      onFocus={() => setHoveredNode({ ...FAKE_NODE_DATA, id: nodeGraphId })}
       onMouseLeave={() => setHoveredNode(undefined)}
       onBlur={() => setHoveredNode(undefined)}
       data-node-type={nodeType}
